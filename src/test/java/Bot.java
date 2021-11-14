@@ -25,8 +25,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
-
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class Bot {
@@ -56,13 +54,24 @@ public class Bot {
 	}
 
 	@Test
-	public void verifyHeaderContent() throws InterruptedException, AWTException, UnirestException, IOException {
+	public void verifyHeaderContent() throws InterruptedException, AWTException, IOException {
+		
+		/*--------------------------ENTER----------------------------*/
+		
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href = '/intro']")));
 		driver.findElement(By.xpath("//a[@href = '/intro']")).click();
 
+		/*-----------------------------------------------------------*/
+		
+		/*--------------------------START----------------------------*/
+		
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("start")));
 		driver.findElement(By.id("start")).click();
 
+		/*-----------------------------------------------------------*/
+		
+		/*--------------------------PROCEED----------------------------*/
+		
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text() = 'Proceed']")));
 		for (WebElement element : driver.findElements(By.xpath("//button[text() = 'Proceed']"))) {
 			element.click();
@@ -77,6 +86,10 @@ public class Bot {
 				break;
 		}
 
+		/*-----------------------------------------------------------*/
+		
+		/*--------------------------VIDEO PLAYER----------------------------*/
+		
 		driver.findElement(By.cssSelector("body")).sendKeys(Keys.CONTROL, Keys.END);
 
 		driver.switchTo().frame("aVideoPlayer");
@@ -94,6 +107,10 @@ public class Bot {
 
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("aVideoSubmit")));
 		driver.findElement(By.id("aVideoSubmit")).click();
+		
+		/*-------------------------------------------------------------------*/
+		
+		/*--------------------------MAZE----------------------------*/
 
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("td.green")));
 		WebElement exit = null;
@@ -107,8 +124,10 @@ public class Bot {
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("crystalMazeFormSubmit")));
 		driver.findElement(By.id("crystalMazeFormSubmit")).click();
 
-		Thread.sleep(10000);
+		/*-----------------------------------------------------------*/
 
+		/*--------------------------MAP----------------------------*/
+		
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("map")));
 		Thread.sleep(5000);
 		driver.findElement(By.cssSelector("body")).sendKeys(Keys.TAB);
@@ -131,6 +150,10 @@ public class Bot {
 		Thread.sleep(2000);
 
 		driver.findElement(By.id("mapsChallengeSubmit")).click();
+		
+		/*----------------------------------------------------------*/
+		
+		/*--------------------------CAPTCHA----------------------------*/
 
 		boolean flag = false;
 		String captcha = "";
@@ -139,7 +162,6 @@ public class Bot {
 		for (LogEntry entry : logs) {
 			if (flag)
 				captcha = entry.getMessage().substring(47, entry.getMessage().length() - 1);
-			System.out.println(captcha);
 			if (entry.getMessage().contains("here"))
 				flag = true;
 		}
@@ -148,10 +170,16 @@ public class Bot {
 		driver.findElement(By.id("notABotCaptchaResponse")).sendKeys(captcha);
 		driver.findElement(By.id("notABotCaptchaSubmit")).click();
 
+		/*------------------------------------------------------------*/
+		
+		/*--------------------------SOCKET----------------------------*/
+		
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("socketGateMessage")));
 		handleSocketConnection(driver.findElement(By.cssSelector("div.yellow")).getText().trim());
 		driver.findElement(By.id("socketGateMessage")).sendKeys(accessToken);
 		driver.findElement(By.cssSelector("form#socketGate button")).click();
+		
+		/*-------------------------------------------------------*/
 
 	}
 
